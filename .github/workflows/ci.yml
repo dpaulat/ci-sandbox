@@ -43,11 +43,13 @@ jobs:
         mkdir build-2
         pushd build-1
         export CC=gcc-11
-        gcc --version
+        export CXX=g++-11
+        $CC --version
         cmake ..
         popd
         pushd build-2
         export CC=gcc-12
-        gcc --version
+        export CXX=g++-12
+        $CC --version
         cmake ..
         popd
