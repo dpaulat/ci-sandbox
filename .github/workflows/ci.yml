@@ -13,7 +13,13 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-    
+
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        path: source
+        submodules: recursive
+
     - name: Step 1
       shell: bash
       run: |
@@ -23,17 +29,16 @@ jobs:
       shell: bash
       run: |
         printenv
-    
+
     - name: Step 3
       shell: pwsh
       run: |
         Get-ChildItem env:
-    
+
     - name: Step 4
       shell: bash
       run: |
-        ls
-        ls ..
+        cd source
         mkdir build-1
         mkdir build-2
         pushd build-1
