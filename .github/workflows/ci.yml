@@ -32,13 +32,17 @@ jobs:
     - name: Step 4
       shell: bash
       run: |
+        ls
+        ls ..
         mkdir build-1
         mkdir build-2
         pushd build-1
+        CC=gcc-11
         gcc --version
         cmake ..
         popd
         pushd build-2
+        CC=gcc-12
         gcc --version
         cmake ..
         popd
