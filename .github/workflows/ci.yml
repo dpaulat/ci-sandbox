@@ -11,25 +11,34 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: ubuntu-22.04
     steps:
-
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v3
-      with:
-        version: 6.4.2
-        arch: win64_msvc2019_64
-        tools: ''
-
-    - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
-      with:
-        arch: x64
-        toolset: 14.34
-        vsversion: 2022
-
-    - name: Setup Python Environment
+    
+    - name: Step 1
+      shell: bash
       run: |
-        pip install conan
-        conan profile new default --detect
-        conan install libiconv/1.17@ --build=missing
+        export TEST_ENV="Hello World"
+
+    - name: Step 2
+      shell: bash
+      run: |
+        printenv
+    
+    - name: Step 3
+      shell: pwsh
+      run: |
+        Get-ChildItem env:
+    
+    - name: Step 4
+      shell: bash
+      run: |
+        mkdir build-1
+        mkdir build-2
+        pushd build-1
+        gcc --version
+        cmake ..
+        popd
+        pushd build-2
+        gcc --version
+        cmake ..
+        popd
