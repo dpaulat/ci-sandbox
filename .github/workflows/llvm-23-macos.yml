@@ -30,6 +30,11 @@ jobs:
           brew --version
           brew config
 
+      - name: Update Homebrew
+        run: |
+          set -euxo pipefail
+          brew update
+
       - name: Show LLVM 23 formula information
         run: |
           echo "=== brew info llvm ==="
