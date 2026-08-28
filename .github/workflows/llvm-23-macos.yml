@@ -1,0 +1,90 @@
+name: Test Homebrew LLVM 23 on macOS 15 Intel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-llvm:
+    name: Homebrew LLVM 23
+    runs-on: macos-15-intel
+
+    steps:
+      - name: Show runner information
+        run: |
+          set -x
+
+          echo "=== System ==="
+          sw_vers
+          uname -a
+          uname -m
+          sysctl -n hw.model
+          sysctl -n hw.ncpu
+
+          echo
+          echo "=== Xcode / Clang ==="
+          xcodebuild -version
+          clang --version
+
+          echo
+          echo "=== Homebrew ==="
+          brew --version
+          brew config
+
+      - name: Show LLVM 23 formula information
+        run: |
+          echo "=== brew info llvm ==="
+          brew info llvm || true
+
+          echo
+          echo "=== brew info llvm@23 ==="
+          brew info llvm@23
+
+          echo
+          echo "=== Homebrew prefix ==="
+          brew --prefix
+
+      - name: Install LLVM 23
+        run: |
+          set -euxo pipefail
+
+          echo "Starting LLVM 23 installation..."
+          start=$(date +%s)
+
+          brew install llvm@23
+
+          end=$(date +%s)
+          elapsed=$((end - start))
+
+          echo
+          echo "LLVM 23 installation took ${elapsed} seconds."
+
+      - name: Verify LLVM 23
+        run: |
+          set -euxo pipefail
+
+          echo "=== LLVM 23 prefix ==="
+          brew --prefix llvm@23
+
+          echo
+          echo "=== Installed files ==="
+          brew list llvm@23 | head -50
+
+          echo
+          echo "=== Clang ==="
+          "$(brew --prefix llvm@23)/bin/clang" --version
+
+          echo
+          echo "=== Clang++ ==="
+          "$(brew --prefix llvm@23)/bin/clang++" --version
+
+          echo
+          echo "=== LLVM ==="
+          "$(brew --prefix llvm@23)/bin/llvm-config" --version
+
+          echo
+          echo "=== Brew list ==="
+          brew list --versions llvm@23
+
+          echo
+          echo "=== Brew leaves ==="
+          brew leaves | grep '^llvm' || true
